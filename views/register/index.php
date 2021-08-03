@@ -2,10 +2,6 @@
 include ROOT.'/layouts/header.php';
 ?>
 
-<div class="p-5 bg-danger">
-	<h1 class="text-light">BeatStore</h1>
-</div>
-
 <div class="d-flex justify-content-center p-5 flex-column">
 
 	<? if (isset($_POST['onSubmit'])):?>

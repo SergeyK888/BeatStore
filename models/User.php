@@ -4,7 +4,7 @@ class User
 {
 
 	/*
-	*Регистрация ппользователя в БД
+	*Регистрация пользователя в БД
 	*/
 	public static function register($name, $password, $email, $whois)
 	{

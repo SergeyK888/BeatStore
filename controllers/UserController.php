@@ -71,4 +71,45 @@ class UserController
 		return true;
 	}
 
+	public function actionLogin()
+	{
+		$title = 'Login User';
+
+		if (isset($_POST['onLogin'])) {
+
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+
+			$errors = [];
+			$htmlError = '
+				<div class="alert alert-danger mt-2 mb-2" role="alert">
+				  #
+				</div>
+			';		
+
+			if (!User::checkMail($email)) {
+				$errors[] = '<p class="text-primary">Invalid email</p> The email address must contain the @ symbol, as well as the domain name. Example: example@domain.demo';
+			}
+
+			if (!User::checkOnlyPassword($password)) {
+				$errors[] = '<p class="text-primary">Invalid password</p> The password must contain at least 8 characters and no more than 50';
+			}
+
+			$user = User::checkUserData($password, $email);
+
+
+			if ($user == false) {
+				$errors[] = '<p class="text-primary">Invalid data</p> Invalid email or password';	
+			}else{
+				User::auth($user);
+				$url = '/';
+				header('Location: '.$url);
+			}
+		}
+		
+		require_once(ROOT.'/views/login/index.php');
+
+		return true;
+	}
+
 }

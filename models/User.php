@@ -24,6 +24,41 @@ class User
 	}
 
 	/*
+	*Авторизация
+	*/
+	public static function auth($user)
+	{
+		session_start();
+		$_SESSION['login_user'] = $user;
+	}
+
+	/*
+	*Проверка почты и пароля в БД
+	*/
+	public static function checkUserData($password, $email)
+	{
+
+		$db = Db::getConnection();
+
+		$sql = 'SELECT * FROM users WHERE email = :email';
+
+		$result = $db->prepare($sql);
+		$result->bindParam(':email', $email, PDO::PARAM_STR);
+		$result->execute();
+
+		$user = $result->fetch();
+		if ($user) {
+			$realPassword = password_verify($password, $user['password']);
+			if ($realPassword == true) {
+				return $user;
+			}
+			return false;
+		}
+
+		return false;
+	}
+
+	/*
 	*Проверка валидации Email
 	*/
 	public static function checkMail($email)
@@ -44,6 +79,17 @@ class User
 				return true;
 			}
 			return false;
+		}
+		return false;
+	}
+
+	/*
+	*Проверка валидации Пароля
+	*/
+	public static function checkOnlyPassword($password)
+	{
+		if (strlen($password) >= 8 and strlen($password) <= 50) {
+			return true;
 		}
 		return false;
 	}
